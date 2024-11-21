@@ -12,18 +12,17 @@
 
 #include "fdf.h"
 
-typedef struct s_coords
+typedef struct s_point
 {
 	int	x;
 	int	y;
 	int	z;
-}	t_coords;
+}	t_point;
 
-void	free_points(t_point ***points, int *cols_per_row, int rows);
-void	print_points(t_point ***points, int *cols_per_row, int rows);
+void	free_points(t_point ***points, int *cols, int rows);
+void	print_points(t_point ***points, int *cols, int rows);
 
-/*
-1. Read Map. CHECK
+/*1. Read Map. CHECK
 2. Convert map into coordinates and store in a struct array.
 4. Isometric wizardry. (put coordinates up/put pixels) // Place the dots.
 5. Draw lines. MiniLibX/MLX42 (Connect the dots) (For this algorithm is needed. DDA is supposedly the simplest. Shenya used Bresenham)
