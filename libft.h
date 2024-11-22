@@ -16,9 +16,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
-# include <stdarg.h>
-# include <stddef.h>
-# include <stdio.h>
+# include "ft_printf.h"
+# include "get_next_line.h"
 
 typedef struct s_list
 {
@@ -68,9 +67,6 @@ void	ft_putnbr_fd(int n, int fd);
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-
-char	*get_next_line(int fd);
-int	ft_printf(const char *str, ...);
 
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstlast(t_list *lst);

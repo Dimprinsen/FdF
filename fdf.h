@@ -13,6 +13,12 @@
 #ifndef FDF_H
 # define FDF_H
 
+# include "libft.h"
+//# include "MLX42/MLX42.h"
+# include <fcntl.h>
+# include <math.h>
+# include <stdlib.h>
+
 typedef struct s_point
 {
 	int	x;
@@ -20,20 +26,15 @@ typedef struct s_point
 	int	z;
 }	t_point;
 
-# include "libft.h"
-//# include "MLX42/MLX42.h"
-# include <fcntl.h>
-# include <math.h>
-# include <stdlib.h>
+void	free_points(t_point ***points, int *cols, int rows);
+void	print_points(t_point ***points, int *cols, int rows);
+void	free_split(char **split);
+void	parse_row(t_point **row_points, char **split, int row, int col_count);
+char	**split_line(char *line, int *count);
+int		count_rows(char *fdfmap);
+t_point	***allocate_points(int rows, int **cols);
+t_point	***parse_map(char *fdfmap, int *rows, int **cols);
 
-void	free_points(t_point ***points, int *cols, int rows)
-void	print_points(t_point ***points, int *cols, int rows)
-void	free_split(char **split)
-void	parse_row(t_point **row_points, char **split, int row, int col_count)
-char	**split_line(char *line, int *count)
-t_point	***allocate_points(int rows, int **cols)
-int	count_rows(char *fdfmap)
-t_point	***parse_map(char *fdfmap, int *rows, int **cols)
 
 # define WIDTH 1024
 # define HEIGHT 640
