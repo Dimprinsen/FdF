@@ -13,11 +13,16 @@
 #ifndef FDF_H
 # define FDF_H
 
+# define WIDTH 1024
+# define HEIGHT 640
+# define WINDOW_WIDTH 800
+# define WINDOW_HEIGHT 600
 # include "libft.h"
-//# include "MLX42/MLX42.h"
+# include "MLX42/MLX42.h"
 # include <fcntl.h>
 # include <math.h>
 # include <stdlib.h>
+# include <stdio.h>
 
 typedef struct s_point
 {
@@ -36,7 +41,6 @@ t_point	***allocate_points(int rows, int **cols);
 t_point	***parse_map(char *fdfmap, int *rows, int **cols);
 
 
-# define WIDTH 1024
-# define HEIGHT 640
+
 
 #endif

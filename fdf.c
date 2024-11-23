@@ -60,7 +60,7 @@ int	count_rows(char *fdfmap)
 	line = get_next_line(fd);
 	while (line)
 	{
-		//ft_printf(" %s", line); // Print each line to ensure it's read correctly.DEBUGGER
+		ft_printf(" %s", line); // Print each line to ensure it's read correctly.DEBUGGER
 		rows++;
 		free(line);
 		line = get_next_line(fd);
@@ -107,15 +107,15 @@ t_point	***parse_map(char *fdfmap, int *rows, int **cols)
 		row++;
 		line = get_next_line(fd);
 	}
-	//if (row != *rows)
+	if (row != *rows) //DEBUGGER
 	{
-    //	ft_printf("Error: Expected rows = %d, but only parsed %d rows.\n", *rows, row);
-    //	return (NULL);
+    	ft_printf("Error: Expected rows = %d, but only parsed %d rows.\n", *rows, row);
+    	return (NULL);
 	}
-	//ft_printf("parse_map completed successfully.\n");
+	ft_printf("parse_map completed successfully.\n");
 	return points;
 }
-
+/*
 int	main(int argc, char *argv[])
 {
 	int		rows;
@@ -127,19 +127,19 @@ int	main(int argc, char *argv[])
 		ft_printf("Incorrect. Proper usage is as follows: ./fdf map.fdf\n");
 		return (1);
 	}
-	//ft_printf("Map file: %s\n", argv[1]); //DEBUGGER
-	//ft_printf("Parsing map...\n"); //DEBUGGER
+	ft_printf("Map file: %s\n", argv[1]); //DEBUGGER
+	ft_printf("Parsing map...\n"); //DEBUGGER
 	points = parse_map(argv[1], &rows, &cols);
 	if (!points)
 	{
-	//	ft_printf("Error: parse_map returned NULL.\n"); //DEBUGGER
+		ft_printf("Error: parse_map returned NULL.\n"); //DEBUGGER
 		return (1);
 	}
-	//ft_printf("Map parsed successfully. Rows: %d\n", rows); //DEBUGGER
+	ft_printf("Map parsed successfully. Rows: %d\n", rows); //DEBUGGER
 	print_points(points, cols, rows);
 	free_points(points, cols, rows);
 	return (0);
-}
+}*/
 
 /*
 

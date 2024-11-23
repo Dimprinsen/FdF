@@ -21,20 +21,20 @@ void	free_points(t_point ***points, int *cols, int rows)
 	while (i < rows)
 	{
 		j = 0;
-		ft_printf("Freeing row %d\n", i); //DEBUGGER
+		//ft_printf("Freeing row %d\n", i); //DEBUGGER
 		while (j < cols[i])
 		{
-			ft_printf("Freeing point[%d][%d]\n", i, j); //DEBUGGER
+			//ft_printf("Freeing point[%d][%d]\n", i, j); //DEBUGGER
 			free(points[i][j]);
 			j++;
 		}
-		ft_printf("Freeing points[%d]\n", i); //DEBUGGER
+		//ft_printf("Freeing points[%d]\n", i); //DEBUGGER
 		free(points[i]);
 		i++;
 	}
-	ft_printf("Freeing points array\n"); //DEBUGGER
+	//ft_printf("Freeing points array\n"); //DEBUGGER
 	free(points);
-	ft_printf("Freeing cols array\n"); //DEBUGGER
+	//ft_printf("Freeing cols array\n"); //DEBUGGER
 	free(cols);
 }
 
