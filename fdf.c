@@ -41,11 +41,11 @@ t_point	***allocate_points(int rows, int **cols)
 	t_point	***points;
 
 	*cols = malloc(rows * sizeof(int));
-	if (!*cols)											//DEBUGGER
-    ft_printf("Failed to allocate memory for cols\n"); //DEBUGGER
+	//if (!*cols)											//DEBUGGER
+    //ft_printf("Failed to allocate memory for cols\n"); //DEBUGGER
 	points = malloc(rows * sizeof(t_point **));
-	if (!points)										//DEBUGGER
-    ft_printf("Failed to allocate memory for points\n"); //DEBUGGER
+	//if (!points)										//DEBUGGER
+    //ft_printf("Failed to allocate memory for points\n"); //DEBUGGER
 	return (points);
 }
 
@@ -60,7 +60,7 @@ int	count_rows(char *fdfmap)
 	line = get_next_line(fd);
 	while (line)
 	{
-		ft_printf(" %s", line); // Print each line to ensure it's read correctly.DEBUGGER
+		//ft_printf(" %s", line); // Print each line to ensure it's read correctly.DEBUGGER
 		rows++;
 		free(line);
 		line = get_next_line(fd);
@@ -78,27 +78,27 @@ t_point	***parse_map(char *fdfmap, int *rows, int **cols)
 	char	**split;
 
 	*rows = count_rows(fdfmap);
-	ft_printf("Number of rows: %d\n", *rows); //DEBUGGER
+	//ft_printf("Number of rows: %d\n", *rows); //DEBUGGER
 	points = allocate_points(*rows, cols);
-	if (!points || !*cols) //DEBUGGER
-	{
-    	ft_printf("Error: Memory allocation for points or cols failed.\n"); //DEBUGGER
-    	return (NULL); //DEBUGGER
-	}
-	ft_printf("Memory allocated for points and cols.\n"); //DEBUGGER
+	//if (!points || !*cols) //DEBUGGER
+	//{
+    //	ft_printf("Error: Memory allocation for points or cols failed.\n"); //DEBUGGER
+    //	return (NULL); //DEBUGGER
+	//}
+	//ft_printf("Memory allocated for points and cols.\n"); //DEBUGGER
 	fd = open(fdfmap, O_RDONLY);
 	row = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
-		ft_printf("Parsing line: %s", line); //DEBUGGER
+	//	ft_printf("Parsing line: %s", line); //DEBUGGER
 		split = split_line(line, &(*cols)[row]);
-		ft_printf("Row %d: Col count = %d\n", row, (*cols)[row]); //DEBUGGER
+	//	ft_printf("Row %d: Col count = %d\n", row, (*cols)[row]); //DEBUGGER
 		points[row] = malloc((*cols)[row] * sizeof(t_point *));
-		if (!points[row]) //DEBUGGER
-    		ft_printf("Failed to allocate memory for row %d\n", row); //DEBUGGER
+	//	if (!points[row]) //DEBUGGER
+    //		ft_printf("Failed to allocate memory for row %d\n", row); //DEBUGGER
 		parse_row(points[row], split, row, (*cols)[row]);
-		ft_printf("Row %d parsed successfully.\n", row);
+	//	ft_printf("Row %d parsed successfully.\n", row);
 		//for (int i = 0; i < (*cols)[row]; i++) //DEBUGGER
     	//	ft_printf("Parsed point: (%d, %d, %d)\n",  //DEBUGGER
         //      points[row][i]->x, points[row][i]->y, points[row][i]->z); //DEBUGGER
@@ -107,11 +107,11 @@ t_point	***parse_map(char *fdfmap, int *rows, int **cols)
 		row++;
 		line = get_next_line(fd);
 	}
-	if (row != *rows) //DEBUGGER
-	{
-    	ft_printf("Error: Expected rows = %d, but only parsed %d rows.\n", *rows, row);
-    	return (NULL);
-	}
+	//if (row != *rows) //DEBUGGER
+	//{
+    //	ft_printf("Error: Expected rows = %d, but only parsed %d rows.\n", *rows, row);
+    //	return (NULL);
+	//}
 	ft_printf("parse_map completed successfully.\n");
 	return points;
 }

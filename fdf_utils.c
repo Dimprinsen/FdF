@@ -38,30 +38,30 @@ void	free_points(t_point ***points, int *cols, int rows)
 	free(cols);
 }
 
-void	print_points(t_point ***points, int *cols, int rows)
+/*void	print_points(t_point ***points, int *cols, int rows)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	ft_printf("Printing points: rows = %d\n", rows); //DEBUGGER
-	for (int i = 0; i < rows; i++) //DEBUGGER
-    	ft_printf("Row %d: cols = %d\n", i, cols[i]); //DEBUGGER
+	//ft_printf("Printing points: rows = %d\n", rows); //DEBUGGER
+	//for (int i = 0; i < rows; i++) //DEBUGGER
+    //	ft_printf("Row %d: cols = %d\n", i, cols[i]); //DEBUGGER
 	while (i < rows)
 	{
 		j = 0;
 		while (j < cols[i])
 		{
-			if (points[i][j] == NULL) //DEBUGGER
-    			ft_printf("Null point at row %d, col %d\n", i, j); //DEBUGGER
-			else //DEBUGGER
-				ft_printf("(%d, %d, %d) ", points[i][j]->x, points[i][j]->y, points[i][j]->z);
+	//		if (points[i][j] == NULL) //DEBUGGER
+    //			ft_printf("Null point at row %d, col %d\n", i, j); //DEBUGGER
+	//		else //DEBUGGER
+	//			ft_printf("(%d, %d, %d) ", points[i][j]->x, points[i][j]->y, points[i][j]->z);
 			j++;
 		}
 		ft_printf("\n");
 		i++;
 	}
-}
+}*/
 
 void	free_split(char **split)
 {

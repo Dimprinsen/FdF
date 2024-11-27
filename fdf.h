@@ -29,6 +29,7 @@ typedef struct s_point
 	int	x;
 	int	y;
 	int	z;
+	uint32_t color; // Store color as an unsigned 32-bit integer
 }	t_point;
 
 void	free_points(t_point ***points, int *cols, int rows);
