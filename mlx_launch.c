@@ -11,29 +11,23 @@ typedef struct s_2d_point
     int y;
 } t_2d_point;
 
-typedef struct s_render_params {
-    mlx_image_t *img;
-    t_point ***points;
-    int rows;
-    int *cols;
-} t_render_params;
-
 int calculate_isometric_bounds(t_point ***points, int rows, int *cols,
                                 double *min_x, double *max_x, double *min_y, double *max_y,
                                 double scale_factor)
 {
     if (!points || !min_x || !max_x || !min_y || !max_y)
-        return -1; // Error: Null pointer
+        return -1;
 
     *min_x = *min_y = INFINITY;
     *max_x = *max_y = -INFINITY;
 
-    for (int row = 0; row < rows; row++) {
-        for (int col = 0; col < cols[row]; col++) {
+    for (int row = 0; row < rows; row++)
+    {
+        for (int col = 0; col < cols[row]; col++)
+        {
             t_point *point = points[row][col];
             double iso_x = (point->x - point->y) * COS_30 * scale_factor;
             double iso_y = (point->x + point->y) * SIN_30 * scale_factor - (point->z * scale_factor);
-
             if (iso_x < *min_x) *min_x = iso_x;
             if (iso_x > *max_x) *max_x = iso_x;
             if (iso_y < *min_y) *min_y = iso_y;
@@ -47,27 +41,21 @@ int calculate_isometric_bounds(t_point ***points, int rows, int *cols,
 double calculate_scale_factor(int rows, int *cols, t_point ***points, int window_width, int window_height)
 {
     double min_x, max_x, min_y, max_y;
-
-    // Start with scale factor 1.0 to calculate initial bounds
     if (calculate_isometric_bounds(points, rows, cols, &min_x, &max_x, &min_y, &max_y, 1.0) != 0) {
         fprintf(stderr, "Failed to calculate isometric bounds\n");
-        return 1.0; // Default fallback scale factor
+        return 1.0;
     }
-
-    // Calculate the width and height in isometric space
-    double iso_width = max_x - min_x + 10; // Add margins
+    double iso_width = max_x - min_x + 10;
     double iso_height = max_y - min_y + 10;
 
     if (iso_width <= 0 || iso_height <= 0) {
         fprintf(stderr, "Invalid isometric dimensions: width=%.2f, height=%.2f\n", iso_width, iso_height);
-        return 1.0; // Default fallback scale factor
+        return 1.0;
     }
-
-    // Calculate scale factor to fit within the window
     double scale_x = (double)window_width / iso_width;
     double scale_y = (double)window_height / iso_height;
 
-    return (scale_x < scale_y) ? scale_x : scale_y; // Choose the smaller scale factor
+    return (scale_x < scale_y) ? scale_x : scale_y;
 }
 
 t_2d_point isometric_projection(t_point *point, double scale_factor, int offset_x, int offset_y)
@@ -116,50 +104,39 @@ void    draw_line(mlx_image_t *img, t_2d_point p1, t_2d_point p2, uint32_t color
 
 void render_map(mlx_image_t *img, t_point ***points, int rows, int *cols)
 {
-    if (!img || !points || rows <= 0 || !cols) {
+    if (!img || !points || rows <= 0 || !cols)
+    {
         fprintf(stderr, "Invalid input to render_map\n");
         return;
     }
-
-    // Calculate the scale factor
     double scale_factor = calculate_scale_factor(rows, cols, points, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-    // Calculate isometric bounds with the final scale factor
     double min_x, max_x, min_y, max_y;
-    if (calculate_isometric_bounds(points, rows, cols, &min_x, &max_x, &min_y, &max_y, scale_factor) != 0) {
+    if (calculate_isometric_bounds(points, rows, cols, &min_x, &max_x, &min_y, &max_y, scale_factor) != 0)
+    {
         fprintf(stderr, "Failed to calculate isometric bounds\n");
         return;
     }
-
-    // Calculate dynamic offsets for centering
     int offset_x = OFFSET_X - (int)((max_x + min_x) / 2);
     int offset_y = OFFSET_Y - (int)((max_y + min_y) / 2);
 
     t_2d_point p1, p2;
-
-    // Replacing the first for loop with a while loop
     int row = 0;
     while (row < rows) {
         int col = 0;
-        // Replacing the second for loop with a while loop
         while (col < cols[row]) {
             p1 = isometric_projection(points[row][col], scale_factor, offset_x, offset_y);
-
-            // Draw a line to the right neighbor (if it exists)
             if (col + 1 < cols[row]) {
                 p2 = isometric_projection(points[row][col + 1], scale_factor, offset_x, offset_y);
-                draw_line(img, p1, p2, 0xFFFFFF); // White line
+                draw_line(img, p1, p2, 0xFFFFFF);
             }
-
-            // Draw a line to the bottom neighbor (if it exists)
             if (row + 1 < rows && col < cols[row + 1]) {
                 p2 = isometric_projection(points[row + 1][col], scale_factor, offset_x, offset_y);
-                draw_line(img, p1, p2, 0xFFFFFF); // White line
+                draw_line(img, p1, p2, 0xFFFFFF);
             }
 
-            col++; // Increment col to continue the while loop
+            col++;
         }
-        row++; // Increment row to continue the outer while loop
+        row++;
     }
 }
 
