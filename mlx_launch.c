@@ -11,7 +11,13 @@ typedef struct s_2d_point
     int y;
 } t_2d_point;
 
-// Function to calculate the isometric bounds
+typedef struct s_render_params {
+    mlx_image_t *img;
+    t_point ***points;
+    int rows;
+    int *cols;
+} t_render_params;
+
 int calculate_isometric_bounds(t_point ***points, int rows, int *cols,
                                 double *min_x, double *max_x, double *min_y, double *max_y,
                                 double scale_factor)
@@ -35,45 +41,9 @@ int calculate_isometric_bounds(t_point ***points, int rows, int *cols,
         }
     }
 
-    return 0; // Success
-}
-
-// Calculate the bounding box of the map
-int calculate_bounding_box(t_point ***points, int rows, int *cols, int *min_x, int *max_x, int *min_y, int *max_y, int *min_z, int *max_z)
-{
-    if (rows <= 0 || !points || !cols) {
-        fprintf(stderr, "Invalid input to calculate_bounding_box\n");
-        return -1;
-    }
-
-    *min_x = *max_x = points[0][0]->x;
-    *min_y = *max_y = points[0][0]->y;
-    *min_z = *max_z = points[0][0]->z;
-
-    for (int row = 0; row < rows; row++) {
-        for (int col = 0; col < cols[row]; col++) {
-            if (!points[row][col]) {
-                fprintf(stderr, "Null point detected at row %d, col %d\n", row, col);
-                return -1;
-            }
-            int x = points[row][col]->x;
-            int y = points[row][col]->y;
-            int z = points[row][col]->z;
-
-            if (x < *min_x) *min_x = x;
-            if (x > *max_x) *max_x = x;
-            if (y < *min_y) *min_y = y;
-            if (y > *max_y) *max_y = y;
-            if (z < *min_z) *min_z = z;
-            if (z > *max_z) *max_z = z;
-        }
-    }
-
     return 0;
 }
 
-// A function to dynamically calculate the scale factor
-// Function to calculate a proper scale factor
 double calculate_scale_factor(int rows, int *cols, t_point ***points, int window_width, int window_height)
 {
     double min_x, max_x, min_y, max_y;
@@ -85,8 +55,8 @@ double calculate_scale_factor(int rows, int *cols, t_point ***points, int window
     }
 
     // Calculate the width and height in isometric space
-    double iso_width = max_x - min_x;
-    double iso_height = max_y - min_y;
+    double iso_width = max_x - min_x + 10; // Add margins
+    double iso_height = max_y - min_y + 10;
 
     if (iso_width <= 0 || iso_height <= 0) {
         fprintf(stderr, "Invalid isometric dimensions: width=%.2f, height=%.2f\n", iso_width, iso_height);
@@ -99,20 +69,7 @@ double calculate_scale_factor(int rows, int *cols, t_point ***points, int window
 
     return (scale_x < scale_y) ? scale_x : scale_y; // Choose the smaller scale factor
 }
-/*t_2d_point isometric_projection(t_point *point)
-{
-    t_2d_point projected;
 
-
-	//printf("Converting point: x=%d, y=%d, z=%d\n", point->x, point->y, point->z); //DEBUGGER
-    projected.x = (int)((point->x - point->y) * COS_30);
-    projected.y = (int)((point->x + point->y) * SIN_30 - point->z);
-	//printf("Projected point: x'=%d, y'=%d\n", projected.x, projected.y); //DEBUGGER
-    return (projected);
-}*/
-
-// A function to apply the projection and scaling
-// Isometric projection with scaling and centering
 t_2d_point isometric_projection(t_point *point, double scale_factor, int offset_x, int offset_y)
 {
     t_2d_point projected;
@@ -129,15 +86,8 @@ t_2d_point isometric_projection(t_point *point, double scale_factor, int offset_
 
     return projected;
 }
-//Error call from main
-void error_callback(const char *message)
-{
-    fprintf(stderr, "Error: %s\n", message);
-}
 
-//Drawing the line.
-
-void draw_line(mlx_image_t *img, t_2d_point p1, t_2d_point p2, uint32_t color)
+void    draw_line(mlx_image_t *img, t_2d_point p1, t_2d_point p2, uint32_t color)
 {
     int dx = abs(p2.x - p1.x);
     int dy = abs(p2.y - p1.y);
@@ -164,60 +114,6 @@ void draw_line(mlx_image_t *img, t_2d_point p1, t_2d_point p2, uint32_t color)
     }
 }
 
-// Function to clear the image (set all pixels to black or a background color)
-void clear_image(mlx_image_t *img)
-{
-    // Use uint32_t for the loop variables to match the type of img->width and img->height
-    for (uint32_t y = 0; y < img->height; y++)  // Use uint32_t for y
-    {
-        for (uint32_t x = 0; x < img->width; x++)  // Use uint32_t for x
-        {
-            mlx_put_pixel(img, x, y, 0x000000);  // Set all pixels to black (or any background color)
-        }
-    }
-}
-//Rendering the map
-
-/*void render_map(mlx_image_t *img, t_point ***points, int rows, int *cols)
-{
-    int row, col;
-    t_2d_point p1, p2;
-
-	// Clear the image first to avoid remnants of previous renders
-    clear_image(img);
-
-    for (row = 0; row < rows; row++)
-    {
-        for (col = 0; col < cols[row]; col++)
-        {
-            // Project the current point
-            p1 = isometric_projection(points[row][col]);
-			// Scale and offset to fit within the window size (if needed)
-            p1.x = p1.x + (WINDOW_WIDTH / 2);  // Adjust the X offset if necessary
-            p1.y = p1.y + (WINDOW_HEIGHT / 2); // Adjust the Y offset if necessary
-
-            // Draw a line to the right neighbor (if it exists)
-            if (col + 1 < cols[row])
-            {
-                p2 = isometric_projection(points[row][col + 1]);
-				p2.x = p2.x + (WINDOW_WIDTH / 2);  // Adjust X offset
-                p2.y = p2.y + (WINDOW_HEIGHT / 2); // Adjust Y offset
-                draw_line(img, p1, p2, 0xFFFFFF); // White line
-            }
-
-            // Draw a line to the bottom neighbor (if it exists)
-            if (row + 1 < rows && col < cols[row + 1])
-            {
-                p2 = isometric_projection(points[row + 1][col]);
-				p2.x = p2.x + (WINDOW_WIDTH / 2);  // Adjust X offset
-                p2.y = p2.y + (WINDOW_HEIGHT / 2); // Adjust Y offset
-                draw_line(img, p1, p2, 0xFFFFFF); // White line
-            }
-        }
-    }
-}*/
-
-// Render the map dynamically scaled and centered
 void render_map(mlx_image_t *img, t_point ***points, int rows, int *cols)
 {
     if (!img || !points || rows <= 0 || !cols) {
@@ -240,8 +136,13 @@ void render_map(mlx_image_t *img, t_point ***points, int rows, int *cols)
     int offset_y = OFFSET_Y - (int)((max_y + min_y) / 2);
 
     t_2d_point p1, p2;
-    for (int row = 0; row < rows; row++) {
-        for (int col = 0; col < cols[row]; col++) {
+
+    // Replacing the first for loop with a while loop
+    int row = 0;
+    while (row < rows) {
+        int col = 0;
+        // Replacing the second for loop with a while loop
+        while (col < cols[row]) {
             p1 = isometric_projection(points[row][col], scale_factor, offset_x, offset_y);
 
             // Draw a line to the right neighbor (if it exists)
@@ -255,54 +156,101 @@ void render_map(mlx_image_t *img, t_point ***points, int rows, int *cols)
                 p2 = isometric_projection(points[row + 1][col], scale_factor, offset_x, offset_y);
                 draw_line(img, p1, p2, 0xFFFFFF); // White line
             }
+
+            col++; // Increment col to continue the while loop
+        }
+        row++; // Increment row to continue the outer while loop
+    }
+}
+
+void error_callback(const char *message)
+{
+    fprintf(stderr, "Error: %s\n", message);
+}
+
+static void remove_stuff_exit(mlx_t *mlx, t_point ***points, int *cols, int rows)
+{
+    mlx_terminate(mlx);
+    free_points(points, cols, rows);
+    exit(0);
+}
+
+void key_hook(mlx_key_data_t keydata, void *param)
+{
+    mlx_t *mlx = (mlx_t *)param;
+    static int is_terminating = 0;
+
+    if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+    {
+        if (!is_terminating)
+        {
+            is_terminating = 1;
+            remove_stuff_exit(mlx, NULL, NULL, 0);
         }
     }
 }
+mlx_t *init_mlx()
+{
+	mlx_t *mlx = mlx_init(WIDTH, HEIGHT, "FdF", true);
+	if (!mlx)
+	{
+		error_callback("MLX42 initialization failed");
+		return (NULL);
+	}
+	return mlx;
+}
+mlx_image_t *create_image(mlx_t *mlx)
+{
+	mlx_image_t *img = mlx_new_image(mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	if (!img)
+	{
+		mlx_terminate(mlx);
+		return (NULL);
+	}
+	return img;
+}
 
-//Creating the window and setting up the main event loop.
+t_point ***parse_map_and_check(int argc, char **argv, int *rows, int **cols)
+{
+    t_point ***points;
+
+    points = parse_map(argv[1], rows, cols);
+	if (argc != 2)
+	{
+		ft_printf("Usage: ./fdf <map.fdf>\n");
+		return (NULL);
+	}
+	if (!points)
+	{
+		ft_printf("Failed to parse map\n");
+		return (NULL);
+	}
+	return (points);
+}
+
 int main(int argc, char **argv)
 {
-    mlx_t *mlx;
-    mlx_image_t *img;
-    t_point ***points;
-    int rows;
-    int *cols;
+	mlx_t *mlx;
+	mlx_image_t *img;
+	t_point ***points;
+	int rows;
+	int *cols;
 
-    if (argc != 2)
-    {
-        ft_printf("Usage: ./fdf <map.fdf>\n");
-        return (1);
-    }
+	points = parse_map_and_check(argc, argv, &rows, &cols);
+	if (!points)
+		return (1);
+	mlx = init_mlx();
+	if (!mlx)
+		return (1);
+	img = create_image(mlx);
+	if (!img)
+		return (1);
+	mlx_image_to_window(mlx, img, 0, 0);
+	render_map(img, points, rows, cols);
+	mlx_key_hook(mlx, key_hook, mlx);
+	mlx_loop(mlx);
 
-    // Parse the map
-    points = parse_map(argv[1], &rows, &cols);
-
-    // Initialize MLX42
-    mlx = mlx_init(WIDTH, HEIGHT, "FdF", true);
-    if (!mlx)
-    {
-        error_callback("MLX42 initialization failed");
-        return (1);
-    }
-
-    // Create an image for rendering
-    img = mlx_new_image(mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-    if (!img)
-    {
-        fprintf(stderr, "Failed to create image\n");
-        mlx_terminate(mlx);
-        return (1);
-    }
-    mlx_image_to_window(mlx, img, 0, 0);
-
-    // Render the map
-    render_map(img, points, rows, cols);
-
-    // Main loop
-    mlx_loop(mlx);
-    mlx_terminate(mlx);
-
-    // Free resources
-    free_points(points, cols, rows);
-    return (0);
+	free_points(points, cols, rows);
+	return (0);
 }
+

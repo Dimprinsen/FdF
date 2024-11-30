@@ -21,47 +21,17 @@ void	free_points(t_point ***points, int *cols, int rows)
 	while (i < rows)
 	{
 		j = 0;
-		//ft_printf("Freeing row %d\n", i); //DEBUGGER
 		while (j < cols[i])
 		{
-			//ft_printf("Freeing point[%d][%d]\n", i, j); //DEBUGGER
 			free(points[i][j]);
 			j++;
 		}
-		//ft_printf("Freeing points[%d]\n", i); //DEBUGGER
 		free(points[i]);
 		i++;
 	}
-	//ft_printf("Freeing points array\n"); //DEBUGGER
 	free(points);
-	//ft_printf("Freeing cols array\n"); //DEBUGGER
 	free(cols);
 }
-
-/*void	print_points(t_point ***points, int *cols, int rows)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	//ft_printf("Printing points: rows = %d\n", rows); //DEBUGGER
-	//for (int i = 0; i < rows; i++) //DEBUGGER
-    //	ft_printf("Row %d: cols = %d\n", i, cols[i]); //DEBUGGER
-	while (i < rows)
-	{
-		j = 0;
-		while (j < cols[i])
-		{
-	//		if (points[i][j] == NULL) //DEBUGGER
-    //			ft_printf("Null point at row %d, col %d\n", i, j); //DEBUGGER
-	//		else //DEBUGGER
-	//			ft_printf("(%d, %d, %d) ", points[i][j]->x, points[i][j]->y, points[i][j]->z);
-			j++;
-		}
-		ft_printf("\n");
-		i++;
-	}
-}*/
 
 void	free_split(char **split)
 {
@@ -88,5 +58,23 @@ void	parse_row(t_point **row_points, char **split, int row, int col_count)
 		row_points[col]->y = row;
 		row_points[col]->z = ft_atoi(split[col]);
 		col++;
+	}
+}
+
+void	clear_image(mlx_image_t *img)
+{
+	uint32_t	y;
+	uint32_t	x;
+
+	y = 0;
+	while (y < img->height)
+	{
+		x = 0;
+		while (x < img->width)
+		{
+			mlx_put_pixel(img, x, y, 0x000000);
+			x++;
+		}
+		y++;
 	}
 }
