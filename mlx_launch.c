@@ -21,18 +21,24 @@ int calculate_isometric_bounds(t_point ***points, int rows, int *cols,
     *min_x = *min_y = INFINITY;
     *max_x = *max_y = -INFINITY;
 
-    for (int row = 0; row < rows; row++)
+    int row = 0;
+    while (row < rows)
     {
-        for (int col = 0; col < cols[row]; col++)
+        int col = 0;
+        while (col < cols[row])
         {
             t_point *point = points[row][col];
             double iso_x = (point->x - point->y) * COS_30 * scale_factor;
             double iso_y = (point->x + point->y) * SIN_30 * scale_factor - (point->z * scale_factor);
+
             if (iso_x < *min_x) *min_x = iso_x;
             if (iso_x > *max_x) *max_x = iso_x;
             if (iso_y < *min_y) *min_y = iso_y;
             if (iso_y > *max_y) *max_y = iso_y;
+
+            col++;
         }
+        row++;
     }
 
     return 0;
