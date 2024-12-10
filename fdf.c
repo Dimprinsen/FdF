@@ -28,57 +28,58 @@ char	**split_line(char *line, int *count)
 	return (split);
 }
 
-t_point	***allocate_points(int rows, int **cols)
+t_point ***allocate_points(t_env *env)
 {
-	t_point	***points;
+    t_point ***points;
 
-	*cols = malloc(rows * sizeof(int));
-	points = malloc(rows * sizeof(t_point **));
-	return (points);
+    points = malloc(env->rows * sizeof(t_point **));
+    env->cols = malloc(env->rows * sizeof(int));
+    return points;
 }
 
-int	count_rows(char *fdfmap)
+int count_rows(char *fdfmap)
 {
-	int		fd;
-	char	*line;
-	int		rows;
+    int fd;
+    char *line;
+    int rows;
 
-	fd = open(fdfmap, O_RDONLY);
-	rows = 0;
-	line = get_next_line(fd);
-	while (line)
-	{
-		rows++;
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	return (rows);
+    fd = open(fdfmap, O_RDONLY);
+    rows = 0;
+    line = get_next_line(fd);
+    while (line)
+    {
+        rows++;
+        free(line);
+        line = get_next_line(fd);
+    }
+    close(fd);
+    return (rows);
 }
 
-t_point	***parse_map(char *fdfmap, int *rows, int **cols)
+t_point ***parse_map(char *fdfmap, t_env *env)
 {
-	t_point	***points;
-	int		fd;
-	char	*line;
-	int		row;
-	char	**split;
+    t_point ***points;
+    int fd;
+    char *line;
+    int row;
+    char **split;
 
-	*rows = count_rows(fdfmap);
-	points = allocate_points(*rows, cols);
-	fd = open(fdfmap, O_RDONLY);
-	row = 0;
-	line = get_next_line(fd);
-	while (line)
-	{
-		split = split_line(line, &(*cols)[row]);
-		points[row] = malloc((*cols)[row] * sizeof(t_point *));
-		parse_row(points[row], split, row, (*cols)[row]);
-		free_split(split);
-		free(line);
-		row++;
-		line = get_next_line(fd);
-	}
-	ft_printf("parse_map completed successfully.\n");
-	return (points);
+    env->rows = count_rows(fdfmap); // Use env->rows
+    points = allocate_points(env);  // Pass env directly
+    fd = open(fdfmap, O_RDONLY);
+    row = 0;
+    line = get_next_line(fd);
+    while (line)
+    {
+        split = split_line(line, &env->cols[row]);
+        points[row] = malloc(env->cols[row] * sizeof(t_point *));
+        parse_row(points[row], split, row, env->cols[row]);
+        free_split(split);
+        free(line);
+        row++;
+        line = get_next_line(fd);
+    }
+    ft_printf("parse_map completed successfully.\n");
+    return points;
 }
+
