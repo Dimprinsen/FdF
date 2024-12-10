@@ -37,6 +37,20 @@ typedef struct s_point
 	uint32_t	color;
 }	t_point;
 
+typedef struct s_env
+{
+    mlx_t *mlx;
+    mlx_image_t *img;
+    t_point ***points;
+    double scale_factor;
+    double min_x;
+    double max_x;
+    double min_y;
+    double max_y;
+    int rows;
+    int *cols;
+} t_env;
+
 void	free_points(t_point ***points, int *cols, int rows);
 void	print_points(t_point ***points, int *cols, int rows);
 void	free_split(char **split);
@@ -44,6 +58,6 @@ void	parse_row(t_point **row_points, char **split, int row, int col_count);
 char	**split_line(char *line, int *count);
 int		count_rows(char *fdfmap);
 
-t_point	***allocate_points(int rows, int **cols);
-t_point	***parse_map(char *fdfmap, int *rows, int **cols);
+t_point ***allocate_points(t_env *env);
+t_point ***parse_map(char *fdfmap, t_env *env);
 #endif
