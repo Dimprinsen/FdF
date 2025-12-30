@@ -3,26 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thtinner <thtinner@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2024/08/25 20:55:41 by thtinner         ###   ########.fr       */
+/*   Updated: 2025/12/30 19:00:18 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-#define COS_30 0.86602540378
-#define SIN_30 0.5
-
-t_2d_point	project_and_scale(t_point *point, int scale)
+static t_z_range	get_z_range(t_point ***pts, int rows, int *cols)
 {
-	t_2d_point	projected;
+	t_z_range	range;
+	int			i;
+	int			j;
 
-	projected.x = (int)((point->x - point->y) * COS_30 * scale);
-	projected.y = (int)((point->x + point->y) * SIN_30 * scale
-			- point->z * scale);
-	return (projected);
+	range.min = pts[0][0]->z;
+	range.max = pts[0][0]->z;
+	i = 0;
+	while (i < rows)
+	{
+		j = 0;
+		while (j < cols[i])
+		{
+			if (pts[i][j]->z < range.min)
+				range.min = pts[i][j]->z;
+			if (pts[i][j]->z > range.max)
+				range.max = pts[i][j]->z;
+			j++;
+		}
+		i++;
+	}
+	return (range);
+}
+
+mlx_t	*init_mlx(void)
+{
+	mlx_t	*mlx;
+
+	mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "FdF", true);
+	if (!mlx)
+		ft_printf("Error: MLX42 initialization failed\n");
+	return (mlx);
 }
 
 void	draw_connections(mlx_image_t *img, t_point ***pts, int *p, int *cols)
@@ -49,6 +71,26 @@ void	draw_connections(mlx_image_t *img, t_point ***pts, int *p, int *cols)
 	}
 }
 
+static void	init_render_params(int *params, t_point ***pts, int rows, int *cols)
+{
+	int			max_cols;
+	t_z_range	z_range;
+	double		map_width;
+	double		map_height;
+
+	max_cols = find_max_cols(cols, rows);
+	z_range = get_z_range(pts, rows, cols);
+	params[2] = get_scale(rows, max_cols, z_range.max - z_range.min);
+	map_width = (max_cols - 1 + rows - 1) * COS_30 * params[2];
+	map_height = (max_cols - 1 + rows - 1) * SIN_30 * params[2]
+		+ (z_range.max - z_range.min) * params[2];
+	params[3] = (WINDOW_WIDTH - map_width) / 2
+		+ (rows - 1) * COS_30 * params[2];
+	params[4] = (WINDOW_HEIGHT - map_height) / 2
+		+ z_range.max * params[2];
+	params[5] = rows;
+}
+
 void	render_map(mlx_image_t *img, t_point ***points, int rows, int *cols)
 {
 	int	row;
@@ -58,10 +100,7 @@ void	render_map(mlx_image_t *img, t_point ***points, int rows, int *cols)
 	clear_image(img);
 	if (rows == 0 || !cols)
 		return ;
-	params[2] = get_scale(rows, find_max_cols(cols, rows));
-	params[3] = WINDOW_WIDTH / 2;
-	params[4] = WINDOW_HEIGHT / 2;
-	params[5] = rows;
+	init_render_params(params, points, rows, cols);
 	row = 0;
 	while (row < rows)
 	{

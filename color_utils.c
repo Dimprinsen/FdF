@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thtinner <thtinner@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: thtinner <thtinner@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2025/08/25 20:55:41 by thtinner         ###   ########.fr       */
+/*   Updated: 2025/12/30 18:28:02 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,10 @@ static uint32_t	parse_hex_color(char *str)
 	return ((result << 8) | 0xFF);
 }
 
-uint32_t	parse_color(char *str, int z)
+uint32_t	parse_color(char *str)
 {
 	char	*comma;
 
-	(void)z;
 	comma = ft_strchr(str, ',');
 	if (comma && *(comma + 1) == '0' && *(comma + 2) == 'x')
 		return (parse_hex_color(comma + 3));

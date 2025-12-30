@@ -3,26 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttinnerh <ttinnerh@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 18:35:20 by ttinnerh          #+#    #+#             */
-/*   Updated: 2024/08/25 20:55:41 by ttinnerh         ###   ########.fr       */
+/*   Updated: 2025/12/30 19:00:16 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-# define WIDTH 1024
-# define HEIGHT 640
 # define WINDOW_WIDTH 1024
 # define WINDOW_HEIGHT 640
+# define COS_30 0.86602540378
+# define SIN_30 0.5
 # include "libft.h"
 # include "MLX42/MLX42.h"
 # include <fcntl.h>
 # include <math.h>
 # include <stdlib.h>
-# include <stdio.h>
 
 typedef struct s_point
 {
@@ -38,8 +37,20 @@ typedef struct s_2d_point
 	int	y;
 }	t_2d_point;
 
+typedef struct s_z_range
+{
+	int	min;
+	int	max;
+}	t_z_range;
+
+typedef struct s_fdf_data
+{
+	t_point	***points;
+	int		rows;
+	int		*cols;
+}	t_fdf_data;
+
 void		free_points(t_point ***points, int *cols, int rows);
-void		print_points(t_point ***points, int *cols, int rows);
 void		free_split(char **split);
 void		parse_row(t_point **row_points, char **split, int row,
 				int col_count);
@@ -51,6 +62,7 @@ t_point		***parse_map(char *fdfmap, int *rows, int **cols);
 void		process_line(t_point ***pts, int **cols, int row, char *line);
 void		render_map(mlx_image_t *img, t_point ***points, int rows,
 				int *cols);
+mlx_t		*init_mlx(void);
 void		draw_connections(mlx_image_t *img, t_point ***pts, int *p,
 				int *cols);
 t_2d_point	project_and_scale(t_point *point, int scale);
@@ -61,8 +73,8 @@ void		step_y(t_2d_point *p1, t_2d_point p2, int *err, int dx);
 void		clear_image(mlx_image_t *img);
 void		key_hook(mlx_key_data_t keydata, void *param);
 void		close_hook(void *param);
-uint32_t	parse_color(char *str, int z);
-int			get_scale(int rows, int cols);
+uint32_t	parse_color(char *str);
+int			get_scale(int rows, int cols, int z_range);
 int			find_max_cols(int *cols, int rows);
 
 #endif

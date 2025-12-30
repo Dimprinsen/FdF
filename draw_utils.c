@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thtinner <thtinner@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2025/08/25 20:55:41 by thtinner         ###   ########.fr       */
+/*   Updated: 2025/12/30 19:00:18 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+t_2d_point	project_and_scale(t_point *point, int scale)
+{
+	t_2d_point	projected;
+
+	projected.x = (int)((point->x - point->y) * COS_30 * scale);
+	projected.y = (int)((point->x + point->y) * SIN_30 * scale
+			- point->z * scale);
+	return (projected);
+}
 
 void	step_x(t_2d_point *p1, t_2d_point p2, int *err, int dy)
 {
