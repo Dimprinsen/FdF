@@ -6,7 +6,7 @@
 #    By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 01:34:27 by thtinner          #+#    #+#              #
-#    Updated: 2026/01/05 20:51:43 by thtinner         ###   ########.fr        #
+#    Updated: 2026/01/05 21:51:33 by thtinner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,6 @@ MLX_DIR = ./MLX42
 FT_PRINTF_DIR = ./ft_printf
 GNL_DIR = ./get_next_line
 LIBFT_DIR = ./libft
-LIBFT_SRC_DIR = ../libft
 
 # Library files
 MLX42 = $(MLX_DIR)/build/libmlx42.a
@@ -50,8 +49,8 @@ NAME = fdf
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-	@make -C $(LIBFT_SRC_DIR)
-	@cp $(LIBFT_SRC_DIR)/libft.a .
+	@make -C $(LIBFT_DIR)
+	@cp $(LIBFT_DIR)/libft.a .
 
 $(NAME): $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS) $(LIBFT) $(MLX42) $(MLX_FLAGS) -o $(NAME)
@@ -61,11 +60,11 @@ $(NAME): $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS) $(LIBFT)
 
 clean:
 	rm -f $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS)
-	@make -C $(LIBFT_SRC_DIR) clean
+	@make -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -f $(NAME) $(LIBFT)
-	@make -C $(LIBFT_SRC_DIR) fclean
+	@make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
