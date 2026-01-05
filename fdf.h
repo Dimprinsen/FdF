@@ -6,7 +6,7 @@
 /*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 18:35:20 by ttinnerh          #+#    #+#             */
-/*   Updated: 2025/12/30 19:00:16 by thtinner         ###   ########.fr       */
+/*   Updated: 2026/01/05 20:31:13 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # define COS_30 0.86602540378
 # define SIN_30 0.5
 # include "libft.h"
+# include "ft_printf.h"
+# include "get_next_line.h"
 # include "MLX42/MLX42.h"
 # include <fcntl.h>
 # include <math.h>
@@ -70,6 +72,7 @@ void		draw_line(mlx_image_t *img, t_2d_point p1, t_2d_point p2,
 				uint32_t c);
 void		step_x(t_2d_point *p1, t_2d_point p2, int *err, int dy);
 void		step_y(t_2d_point *p1, t_2d_point p2, int *err, int dx);
+void		put_pixel(mlx_image_t *img, int x, int y, uint32_t color);
 void		clear_image(mlx_image_t *img);
 void		key_hook(mlx_key_data_t keydata, void *param);
 void		close_hook(void *param);

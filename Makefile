@@ -6,7 +6,7 @@
 #    By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 01:34:27 by thtinner          #+#    #+#              #
-#    Updated: 2025/12/30 21:10:59 by thtinner         ###   ########.fr        #
+#    Updated: 2026/01/05 20:51:43 by thtinner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ MLX_DIR = ./MLX42
 FT_PRINTF_DIR = ./ft_printf
 GNL_DIR = ./get_next_line
 LIBFT_DIR = ./libft
+LIBFT_SRC_DIR = ../libft
 
 # Library files
 MLX42 = $(MLX_DIR)/build/libmlx42.a
@@ -46,17 +47,13 @@ MLX_FLAGS = -ldl -lglfw -pthread -lm
 NAME = fdf
 
 # Rules
-all: mlx_check $(NAME)
+all: $(LIBFT) $(NAME)
 
-mlx_check:
-	@if [ ! -f "$(MLX42)" ]; then \
-		echo "Error: MLX42 not found. Please install it:"; \
-		echo "  git clone https://github.com/codam-coding-college/MLX42.git"; \
-		echo "  cd MLX42 && cmake -B build && cmake --build build"; \
-		exit 1; \
-	fi
+$(LIBFT):
+	@make -C $(LIBFT_SRC_DIR)
+	@cp $(LIBFT_SRC_DIR)/libft.a .
 
-$(NAME): $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS)
+$(NAME): $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS) $(LIBFT) $(MLX42) $(MLX_FLAGS) -o $(NAME)
 
 %.o: %.c
@@ -64,11 +61,13 @@ $(NAME): $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS)
 
 clean:
 	rm -f $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS)
+	@make -C $(LIBFT_SRC_DIR) clean
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(LIBFT)
+	@make -C $(LIBFT_SRC_DIR) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re mlx_check
+.PHONY: all clean fclean re
 

@@ -6,7 +6,7 @@
 /*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2025/12/30 19:00:18 by thtinner         ###   ########.fr       */
+/*   Updated: 2026/01/05 21:30:56 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,22 @@ void	step_y(t_2d_point *p1, t_2d_point p2, int *err, int dx)
 		p1->y--;
 }
 
+void	put_pixel(mlx_image_t *img, int x, int y, uint32_t color)
+{
+	uint8_t	*pixel;
+	int		index;
+
+	if (x >= 0 && x < (int)img->width && y >= 0 && y < (int)img->height)
+	{
+		index = (y * img->width + x) * sizeof(int32_t);
+		pixel = &img->pixels[index];
+		*(pixel++) = (uint8_t)(color >> 24);
+		*(pixel++) = (uint8_t)(color >> 16);
+		*(pixel++) = (uint8_t)(color >> 8);
+		*(pixel++) = (uint8_t)(color & 0xFF);
+	}
+}
+
 void	draw_line(mlx_image_t *img, t_2d_point p1, t_2d_point p2,
 	uint32_t color)
 {
@@ -53,9 +69,7 @@ void	draw_line(mlx_image_t *img, t_2d_point p1, t_2d_point p2,
 	err = dx - dy;
 	while (1)
 	{
-		if (p1.x >= 0 && p1.x < (int)img->width
-			&& p1.y >= 0 && p1.y < (int)img->height)
-			mlx_put_pixel(img, p1.x, p1.y, color);
+		put_pixel(img, p1.x, p1.y, color);
 		if (p1.x == p2.x && p1.y == p2.y)
 			break ;
 		e2 = err * 2;
@@ -63,23 +77,5 @@ void	draw_line(mlx_image_t *img, t_2d_point p1, t_2d_point p2,
 			step_x(&p1, p2, &err, dy);
 		if (e2 < dx)
 			step_y(&p1, p2, &err, dx);
-	}
-}
-
-void	clear_image(mlx_image_t *img)
-{
-	uint32_t	y;
-	uint32_t	x;
-
-	y = 0;
-	while (y < img->height)
-	{
-		x = 0;
-		while (x < img->width)
-		{
-			mlx_put_pixel(img, x, y, 0x000000FF);
-			x++;
-		}
-		y++;
 	}
 }

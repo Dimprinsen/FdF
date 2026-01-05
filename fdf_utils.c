@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thtinner <thtinner@student.42.de>          +#+  +:+       +#+        */
+/*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2025/12/30 18:29:45 by thtinner         ###   ########.fr       */
+/*   Updated: 2026/01/05 21:33:11 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,22 @@ int	read_map_lines(t_point ***pts, int **cols, int fd, int rows)
 	if (row != rows)
 		return (ft_printf("Error: Rows mismatch.\n"), -1);
 	return (0);
+}
+
+void	clear_image(mlx_image_t *img)
+{
+	uint32_t	y;
+	uint32_t	x;
+
+	y = 0;
+	while (y < img->height)
+	{
+		x = 0;
+		while (x < img->width)
+		{
+			put_pixel(img, x, y, 0x000000FF);
+			x++;
+		}
+		y++;
+	}
 }

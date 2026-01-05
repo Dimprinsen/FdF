@@ -6,7 +6,7 @@
 /*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2025/12/30 20:26:07 by thtinner         ###   ########.fr       */
+/*   Updated: 2026/01/05 20:22:29 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	get_scale(int rows, int cols, int z_range)
 
 	projected_width = (cols + rows) * COS_30;
 	projected_height = (cols + rows) * SIN_30 + z_range;
-	scale_x = (WINDOW_WIDTH * 0.8) / projected_width;
-	scale_y = (WINDOW_HEIGHT * 0.8) / projected_height;
+	scale_x = (WINDOW_WIDTH * 0.9) / projected_width;
+	scale_y = (WINDOW_HEIGHT * 0.9) / projected_height;
 	if (scale_x < scale_y)
 		scale = (int)scale_x;
 	else

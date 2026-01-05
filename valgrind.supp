@@ -1,0 +1,78 @@
+{
+   MLX42_GLFW_Init
+   Memcheck:Leak
+   ...
+   obj:*/libglfw.so*
+}
+
+{
+   MLX42_OpenGL_Init
+   Memcheck:Leak
+   ...
+   obj:*/libGL.so*
+}
+
+{
+   NVIDIA_Driver_Leak
+   Memcheck:Leak
+   ...
+   obj:*/libnvidia-glcore.so*
+}
+
+{
+   NVIDIA_GLX_Leak
+   Memcheck:Leak
+   ...
+   obj:*/libGLX_nvidia.so*
+}
+
+{
+   DBus_Library_Leak
+   Memcheck:Leak
+   ...
+   obj:*/libdbus-1.so*
+}
+
+{
+   DynamicLinker_Leak
+   Memcheck:Leak
+   ...
+   fun:_dl_find_object_update
+}
+
+{
+   DynamicLinker_dlopen
+   Memcheck:Leak
+   ...
+   fun:dlopen*
+}
+
+{
+   NVIDIA_Conditional
+   Memcheck:Cond
+   ...
+   obj:*/libnvidia-glcore.so*
+}
+
+{
+   NVIDIA_Value
+   Memcheck:Value8
+   ...
+   obj:*/libnvidia-glcore.so*
+}
+
+{
+   GLFW_Still_Reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/libglfw.so*
+}
+
+{
+   OpenGL_Still_Reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/libGL.so*
+}
