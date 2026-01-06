@@ -6,7 +6,7 @@
 /*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 18:35:20 by ttinnerh          #+#    #+#             */
-/*   Updated: 2026/01/05 21:51:36 by thtinner         ###   ########.fr       */
+/*   Updated: 2026/01/06 17:33:10 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ typedef struct s_z_range
 	int	max;
 }	t_z_range;
 
-typedef struct s_fdf_data
+typedef struct s_map_data
 {
 	t_point	***points;
 	int		rows;
 	int		*cols;
-}	t_fdf_data;
+}	t_map_data;
 
 void		free_points(t_point ***points, int *cols, int rows);
 void		free_split(char **split);

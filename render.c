@@ -6,7 +6,7 @@
 /*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2026/01/05 20:22:32 by thtinner         ###   ########.fr       */
+/*   Updated: 2026/01/06 21:29:46 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,6 @@ static t_z_range	get_z_range(t_point ***pts, int rows, int *cols)
 		i++;
 	}
 	return (range);
-}
-
-mlx_t	*init_mlx(void)
-{
-	mlx_t	*mlx;
-
-	mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "FdF", true);
-	if (!mlx)
-		ft_printf("Error: MLX42 initialization failed\n");
-	return (mlx);
 }
 
 void	draw_connections(mlx_image_t *img, t_point ***pts, int *p, int *cols)
@@ -114,4 +104,26 @@ void	render_map(mlx_image_t *img, t_point ***points, int rows, int *cols)
 		}
 		row++;
 	}
+}
+
+int	main(int argc, char **argv)
+{
+	mlx_t		*mlx;
+	mlx_image_t	*img;
+	t_map_data	data;
+
+	if (argc != 2)
+		return (ft_printf("Usage: ./fdf <map.fdf>\n"), 1);
+	data.points = parse_map(argv[1], &data.rows, &data.cols);
+	if (!data.points)
+		return (1);
+	mlx = init_mlx();
+	if (!mlx)
+		return (free_points(data.points, data.cols, data.rows), 1);
+	img = create_image(mlx);
+	if (!img)
+		return (free_points(data.points, data.cols, data.rows), 1);
+	setup_and_run(mlx, img, &data);
+	free_points(data.points, data.cols, data.rows);
+	return (0);
 }

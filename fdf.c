@@ -6,27 +6,11 @@
 /*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2026/01/05 20:22:02 by thtinner         ###   ########.fr       */
+/*   Updated: 2026/01/06 21:29:40 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-char	**split_line(char *line, int *count)
-{
-	char	**split;
-	int		index;
-
-	split = ft_split(line, ' ');
-	index = 0;
-	*count = 0;
-	while (split[index])
-	{
-		(*count)++;
-		index++;
-	}
-	return (split);
-}
 
 t_point	***allocate_points(int rows, int **cols)
 {
@@ -60,6 +44,25 @@ int	count_rows(char *fdfmap)
 	}
 	close(fd);
 	return (rows);
+}
+
+int	read_map_lines(t_point ***pts, int **cols, int fd, int rows)
+{
+	char	*line;
+	int		row;
+
+	row = 0;
+	line = get_next_line(fd);
+	while (line)
+	{
+		process_line(pts, cols, row, line);
+		free(line);
+		row++;
+		line = get_next_line(fd);
+	}
+	if (row != rows)
+		return (ft_printf("Error: Rows mismatch.\n"), -1);
+	return (0);
 }
 
 void	process_line(t_point ***pts, int **cols, int row, char *line)

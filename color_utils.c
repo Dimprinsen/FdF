@@ -6,7 +6,7 @@
 /*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2026/01/05 20:21:47 by thtinner         ###   ########.fr       */
+/*   Updated: 2026/01/06 19:51:35 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,5 @@ uint32_t	parse_color(char *str)
 	comma = ft_strchr(str, ',');
 	if (comma && *(comma + 1) == '0' && *(comma + 2) == 'x')
 		return (parse_hex_color(comma + 3));
-	return (0xFFFFFFFF);
+	return (0x40E0D0FF);
 }

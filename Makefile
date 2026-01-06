@@ -6,7 +6,7 @@
 #    By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 01:34:27 by thtinner          #+#    #+#              #
-#    Updated: 2026/01/05 21:51:33 by thtinner         ###   ########.fr        #
+#    Updated: 2026/01/06 17:04:11 by thtinner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,13 +46,19 @@ MLX_FLAGS = -ldl -lglfw -pthread -lm
 NAME = fdf
 
 # Rules
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(MLX42) $(NAME)
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
 	@cp $(LIBFT_DIR)/libft.a .
 
-$(NAME): $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS) $(LIBFT)
+$(MLX42):
+	@if [ ! -f $(MLX42) ]; then \
+		echo "Error: MLX42 not built. Run: cd MLX42 && cmake -B build && cmake --build build"; \
+		exit 1; \
+	fi
+
+$(NAME): $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS) $(LIBFT) $(MLX42)
 	$(CC) $(CFLAGS) $(OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS) $(LIBFT) $(MLX42) $(MLX_FLAGS) -o $(NAME)
 
 %.o: %.c
