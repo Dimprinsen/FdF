@@ -6,7 +6,7 @@
 /*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 18:35:20 by thtinner          #+#    #+#             */
-/*   Updated: 2026/01/06 20:03:05 by thtinner         ###   ########.fr       */
+/*   Updated: 2026/01/27 15:05:50 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	find_max_cols(int *cols, int rows)
 	return (max);
 }
 
-static void	setup_and_run(mlx_t *mlx, mlx_image_t *img, t_map_data *data)
+void	setup_and_run(mlx_t *mlx, mlx_image_t *img, t_map_data *data)
 {
 	mlx_image_to_window(mlx, img, 0, 0);
 	render_map(img, data->points, data->rows, data->cols);
@@ -59,7 +59,7 @@ static void	setup_and_run(mlx_t *mlx, mlx_image_t *img, t_map_data *data)
 	mlx_terminate(mlx);
 }
 
-static mlx_image_t	*create_image(mlx_t *mlx)
+mlx_image_t	*create_image(mlx_t *mlx)
 {
 	mlx_image_t	*img;
 
