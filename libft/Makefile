@@ -6,12 +6,14 @@
 #    By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/10 18:35:57 by ttinnerh          #+#    #+#              #
-#    Updated: 2026/01/05 21:51:35 by thtinner         ###   ########.fr        #
+#    Updated: 2026/02/15 17:31:58 by thtinner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := libft.a
-FILES := ft_split.c ft_atoi.c
+FILES := ft_split.c ft_atoi.c \
+	ft_printf.c ft_printf_util.c \
+	get_next_line.c get_next_line_utils.c
 OBJS := $(FILES:%.c=%.o)
 HEADER := libft.h
 CFLAGS := -Wall -Werror -Wextra

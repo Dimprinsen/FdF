@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: thtinner <thtinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/14 18:35:20 by ttinnerh          #+#    #+#             */
-/*   Updated: 2026/01/27 15:07:15 by thtinner         ###   ########.fr       */
+/*   Created: 2025/06/14 18:35:20 by thtinner          #+#    #+#             */
+/*   Updated: 2026/02/15 17:44:09 by thtinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 # define COS_30 0.86602540378
 # define SIN_30 0.5
 # include "libft.h"
-# include "ft_printf.h"
-# include "get_next_line.h"
 # include "MLX42/MLX42.h"
 # include <fcntl.h>
 # include <math.h>
