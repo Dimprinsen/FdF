@@ -15,7 +15,7 @@ Built using the MLX42 graphics library (a modern version of MiniLibX).
 ## Demo
 
 ![FdF Demo](demo/fdf_demo.png)
-Example rendering of the 42 map in isometric projection.
+Example rendering of the julia map in isometric projection.
 
 # Instructions
 
